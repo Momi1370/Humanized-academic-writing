@@ -12,7 +12,7 @@ Prose reads as machine-written when it could have been written without knowing t
 Three commitments follow.
 
 1. **The writer is the author.** Edit, question and restructure. Never supply a claim, figure or citation the writer has not provided. If a sentence needs a fact that is not available, ask for it or cut the sentence.
-2. **No promise about detectors.** Current detectors are trained classifiers that do not score a checklist, and they flag lightly AI-polished human text at high rates (see `evidence.md`). This skill removes real defects that readers and examiners notice. It cannot guarantee a score.
+2. **No promise about detectors.** Current detectors are trained classifiers that do not score a checklist, and they flag lightly AI-polished human text at high rates (see `evidence.md`). The patterns below are defects in their own right: each puts a gesture where a fact should be, and a reader loses nothing when it goes. This skill removes them for that reason. It does not aim at a detector score and cannot guarantee one.
 3. **Disclose.** Where the institution requires an AI logbook or a statement of AI use, every session ends with a logbook entry (Step 6).
 
 ## When to use
@@ -25,7 +25,18 @@ If the request is to produce a section from a topic alone, ask first for the not
 
 ## Before starting
 
-Read the writer's course rules if a file named `academic-writing-rules.md` exists in the folder that contains this skill or in the project. It governs register, tense by section, hedging vocabulary and given-new order. This skill adds to it and changes one thing: the connectives it lists (moreover, furthermore, consequently) are correct, but they are used sparingly, as set out in the recipes below.
+The skill needs no other material. If the writer has a style guide, course rules or journal instructions, read them first and let them override the defaults below. Without one, apply these:
+
+| Convention | Default |
+|---|---|
+| Register | Formal. No contractions or colloquialisms. First person only where the field accepts it. |
+| Tense | Present perfect for the state of research ("has been studied"). Simple past for procedures and for reported data. Simple present for tables and figures, interpretation and conclusions. |
+| Voice | Passive for procedures in the methods section. Elsewhere, active when the actor matters. |
+| Hedging | The modal matches the strength of the evidence. |
+| Order | Known information opens the sentence; new information ends it. |
+| Citation | The style the writer already uses, unchanged. |
+
+One point holds even against a style guide that lists them: connectives such as moreover, furthermore and consequently are correct, but they are used sparingly, as set out in the recipes below.
 
 ## Workflow
 
@@ -46,7 +57,7 @@ If none exists, delete the sentence. This step does most of the work. Skipping i
 
 **Step 5. Verify.** Check the Step 1 list item by item against the new text. Rerun the script. Run the self-checks.
 
-**Step 6. Report and log.** Give the writer the revised text, a short list of what changed and why, and any question still open. Then draft the logbook entry:
+**Step 6. Report and log.** Give the writer the revised text, a short list of what changed and why, and any question still open. Where the institution requires a record of AI use, or the writer wants one, draft the entry:
 
 ```
 Date | Tool and model | Prompt (verbatim or summarised) | Purpose | How I processed the output
@@ -61,11 +72,15 @@ Date | Tool and model | Prompt (verbatim or summarised) | Purpose | How I proces
 3. One sentence of interpretation: what the evidence means for the research question.
 4. An ending on the newest information. The paragraph stops when the point is made.
 
-**Sentence length follows content.** A result, a pivot or a verdict takes twelve words or fewer. A mechanism, a qualification or a synthesis of several sources takes thirty or more. After revision, a stretch of ten sentences normally contains at least one of each. Four sentences in a row within six words of one another is a reason to look again: in the three human articles measured for this skill, that happens in 0-7% of four-sentence stretches.
+**Sentence length follows content.** A result, a pivot or a verdict takes twelve words or fewer. A mechanism, a qualification or a synthesis of several sources takes thirty or more. After revision, a stretch of ten sentences normally contains at least one of each. Four sentences in a row within six words of one another is a reason to look again: in the three published articles measured for this skill (`evidence.md`, section 5), that happens in 0-7% of four-sentence stretches.
 
-**Links come from given-new order.** Open a sentence with a term the previous sentence ended on, or with "this" plus a noun ("This gap", "These surveys", "Such critics"). Add a connective where the logical relation would otherwise be misread, which is mostly contrast and concession: however, yet, although, whereas. In the three human articles measured for this skill, 5-10% of sentences open with a connective. Hold a revision to about one sentence in six, with at most one additive opener (moreover, furthermore, in addition) per paragraph.
+**Links come from given-new order.** Open a sentence with a term the previous sentence ended on, or with "this" plus a noun ("This gap", "These surveys", "Such critics"). Add a connective where the logical relation would otherwise be misread, which is mostly contrast and concession: however, yet, although, whereas. In the same three articles, 5-10% of sentences open with a connective. Hold a revision to about one sentence in six, with at most one additive opener (moreover, furthermore, additionally, in addition) per paragraph.
 
-**Verbs are plain.** The subject is the thing studied and the verb says what it does: is, has, shows, finds, uses, rose, fell. Keep the passive for methods, as the course rules require.
+**Verbs are plain.** The subject is the thing studied and the verb says what it does: is, has, shows, finds, uses, rose, fell. Keep the passive for procedures in the methods section.
+
+**A contrast needs an opponent.** Write "not X but Y" or "Y rather than X" when a cited source holds X. Otherwise state Y.
+
+**Magnitude replaces emphasis.** Where the draft says drastically, remarkable or crucial, give the figure, the comparison or the consequence. If none exists, the modifier goes.
 
 **A hedge carries its reason.** One hedge per claim, with the source of the doubt stated: "probably because the fraction of the population above the threshold was negligible until the 1990s". Match the modal to the evidence (may, might, could are not interchangeable).
 
@@ -75,26 +90,32 @@ Date | Tool and model | Prompt (verbatim or summarised) | Purpose | How I proces
 
 ## Detection checklist
 
-Ordered by how well the evidence supports each as a marker of LLM prose. Full word lists, sources and fixes are in `patterns.md`.
+Ordered by how well the evidence supports each as a marker of LLM prose, as of November 2026. Full word lists, sources and fixes are in `patterns.md`.
 
 | Tier | Pattern | Typical form |
 |---|---|---|
-| Strong | Inflated significance in place of a fact | "plays a pivotal role in", "has emerged as a key challenge" |
-| Strong | Trailing -ing commentary | "..., highlighting the importance of X" |
-| Strong | Clusters of marker vocabulary | several of: delve, underscore, showcase, foster, leverage, multifaceted, landscape, realm |
+| Strong | Importance flagged in place of a fact | "this matters", "why X matters", "matters because", "plays a crucial role in", "underscores the importance of" |
+| Strong | Corrective frame with nothing to correct | "not simply X", "rather than simply", "is more than a ...", "is not just X; it is Y" |
+| Strong | Sentence-final -ing commentary | "..., highlighting / underscoring / ensuring / reflecting ..." |
 | Strong | Noun-heavy, nominalised density | "the implementation of the optimisation of" |
 | Strong | Attribution to nobody | "studies have shown", "many scholars argue" with no citation |
+| Moderate | Dense formal transitions (very high in Gemini) | Furthermore / Additionally / Conversely at the head of successive sentences |
+| Moderate | Emphatic modifiers and stock idioms (Gemini) | drastically, unmatched, incredible; "bridges the gap", "heavy lifting", "crystal clear" |
+| Moderate | Mannered phrasing | a metaphor or flourish where a direct statement belongs |
 | Moderate | Elaborate verb where "is" or "has" belongs | "serves as", "stands as", "boasts" |
-| Moderate | Contrast frame with nothing to correct | "not only X but also Y", "rather than merely" |
 | Moderate | Reflex triads | three abstract nouns or adjectives in a row |
 | Moderate | Formula endings | "Despite these challenges...", "Future research should explore..." |
-| Moderate | Stacked sentence-initial connectives | Moreover / Furthermore / Additionally in sequence |
 | Weak | Uniform sentence and paragraph length | every sentence 15-22 words |
+| Weak | First-generation vocabulary on its own | delve, tapestry, vibrant, testament |
 | Weak | Dash asides, bold terms, bullet lists inside prose | chat formatting carried into a paper |
 
-**Do not treat as defects:** formal register, the passive, correct grammar, hedging, standard reporting phrases ("This study investigates", "The results indicate"), a single connective, or a marker word that is the field's own term. Rose (2020) uses "foster" sixteen times because it is the claim under examination.
+**The move outlasts the wording.** Between 55% and 72% of a model's phrase-level tells are unique to one version of it (Graphite, 2026). Check for the move (asserting importance, correcting a view nobody holds, appending commentary) and treat any phrase list as this year's examples.
 
-**Do not over-correct.** No inserted errors, contractions or colloquialisms. No fragments for effect. No synonym cycling for technical terms. No stripping of hedges. Keep the vocabulary range of the original.
+**Older tells have faded.** The first-generation words had largely left model output by 2025, and most 2026 models use dashes less often than pre-2022 human writers did. One such word, or one dash, tells a reader little. Remove these words when the sentence is empty; do not hunt for them first.
+
+**Do not treat as defects:** formal register, the passive, correct grammar, hedging, standard reporting phrases ("This study investigates", "The results indicate"), a single connective, a contrast that answers a cited view, or a marker word that is the field's own term. Rose (2020) uses "foster" sixteen times because it is the claim under examination.
+
+**Do not over-correct.** No inserted errors, contractions or colloquialisms. No fragments for effect. No synonym cycling for technical terms. No stripping of hedges. No trading one transition for another ("furthermore" to "moreover"). Keep the vocabulary range of the original.
 
 ## Example
 
@@ -116,13 +137,14 @@ The first version could describe any two countries and any policy. Every figure 
 4. **First-words column.** List the first two words of every sentence. Look for repeats and connective runs.
 5. **Length row.** Write the word count of each sentence in a row. Look for flat stretches.
 6. **Tail test.** For each sentence ending in ", -ing ...": does the clause add a sourced fact? If not, stop at the comma.
-7. **Defence test.** Can the writer explain each paragraph's claim and its source without the text in front of them?
+7. **Opponent test.** For each "not X", "rather than X" or "more than X": who holds X? Cite them or state the positive claim.
+8. **Defence test.** Can the writer explain each paragraph's claim and its source without the text in front of them?
 
-`scripts/style_check.py` automates checks 4 to 6 and counts the checklist patterns. It reports features and lists sentences to reread. It is not a detector.
+`scripts/style_check.py` automates checks 4 to 6, lists the candidates for check 7 and counts the checklist patterns. It reports features and lists sentences to reread. It is not a detector.
 
 ## Files
 
-- `patterns.md`: full pattern catalogue with word lists, evidence and fixes
-- `examples.md`: before and after pairs by section type
+- `patterns.md`: full pattern catalogue with word lists, evidence and fixes; the 2026 patterns come first
+- `examples.md`: before and after pairs by section type, built from three published articles
 - `evidence.md`: research summary with sources, dated, and the measurements behind the thresholds
 - `scripts/style_check.py`: self-check script (Python 3, no dependencies)
