@@ -1,6 +1,6 @@
 # Evidence Base
 
-Researched 11 November 2026; section 3 added 12 November 2026. Detector behaviour and model vocabulary both change within months, so recheck anything here that a decision depends on.
+Researched 11 November 2026; sections 3 and 7 added 12 November 2026. Detector behaviour and model vocabulary both change within months, so recheck anything here that a decision depends on.
 
 Confidence labels: **Primary** means the full text of the paper or page was fetched and read during this research. **Secondary** means the figure came from a search summary and was not checked against the original; verify it before citing it in academic work.
 
@@ -138,10 +138,34 @@ Where no record is required, the logbook step is optional. Keeping one is still 
 
 ---
 
-## 7. What was not tested
+## 7. Sources for the positive structures
+
+`structures.md` rests on open teaching material from university writing centres. These sources describe conventions of academic prose. They are not studies of AI text, and nothing in them concerns detection.
+
+| Structure | Source | What it supplies | Confidence |
+|---|---|---|---|
+| Claim, evidence, interpretation | UNC Writing Center, "Paragraphs" | Five-step paragraph development (controlling idea, elaboration, example, explanation of the example, completion or transition); the example and explanation steps repeat; length does not define a paragraph | Primary |
+| Given-new flow | Duke Graduate School Scientific Writing Resource, Lesson 2 | New information last; passive voice to move old information forward; first and last sentences of a paragraph match | Primary |
+| Given-new flow | Gopen & Swan (1990), *American Scientist* | The original statement of topic and stress positions | Secondary: the page did not load during this research, so it is cited as background only |
+| Hedging | Manchester Academic Phrasebank, "Being cautious" | Hedging phrases grouped by task | Primary |
+| Hedging | George Mason University Writing Center, "Hedges" | Devices by word class; boosters are less common in academic writing | Primary |
+| Concrete subjects and verbs | Duke Scientific Writing Resource, Lesson 1 | Actions in verbs, characters in subjects, subjects near verbs; nominalisations defined and their legitimate uses | Primary |
+| Length from content | Purdue OWL, "Strategies for Variation" | Long sentences carry more information and short ones emphasise a point; also recommends alternating lengths for rhythm | Primary |
+
+**Notes**
+
+1. Three rules in the hedging section are this skill's own and are not stated by the two hedging sources: the table matching wording to strength of evidence, one hedge per claim, and a stated reason for each hedge. They are consistent with the sources and go beyond them.
+2. The skill departs from Purdue OWL on one point. The OWL advises alternating short and long sentences for rhythm. The skill assigns length by content, because alternation by rule is one of the patterns it removes.
+3. The section-by-section table and the build order in `structures.md` are a synthesis of standard conventions and have no single source.
+4. The UNC handout is licensed CC BY-NC-ND 4.0. It is summarised and linked, not reproduced.
+
+---
+
+## 8. What was not tested
 
 - The skill was not tested against any commercial detector. No claim is made about scores.
 - The rules were checked by running the script on six short AI-style passages and their revisions (see `examples.md`). They were not tested with a fresh model session on an unseen draft.
+- The positive structures follow established teaching conventions. Their effect on drafts produced with this skill was not measured.
 - The script's thresholds come from three articles. A different discipline may sit outside them legitimately.
 - The 2026 patterns in section 3 were measured on web articles. Their rates in academic prose are unknown.
 
@@ -152,18 +176,24 @@ Where no record is required, the logbook step is optional. Keeping one is still 
 - Adam, G. A., et al. (2026). GPTZero: Robust detection of LLM-generated texts. https://arxiv.org/abs/2602.13042
 - Basani, A., & Chen, P.-Y. (2026). Diversity boosts AI-generated text detection. https://arxiv.org/abs/2509.18880
 - Dugan, L., et al. (2024). RAID: A shared benchmark for robust evaluation of machine-generated text detectors. https://arxiv.org/abs/2405.07940
+- Duke Graduate School. Scientific Writing Resource, Lessons 1 and 2. https://sites.duke.edu/scientificwriting/
 - Druck, G., Paredes, J. L., & Smith, E. (2026a). AI tells. Graphite. https://graphite.io/research/ai-tells
 - Druck, G., Paredes, J. L., & Smith, E. (2026b). AI tells: Opus 5.5 update. Graphite. https://graphite.io/research/ai-tells-opus-5-5-update
 - Druck, G., Paredes, J. L., & Smith, E. (2026c). AI tells: Gemini 4 Argon. Graphite. https://graphite.io/research/ai-tells-gemini-4-argon-update
 - Emi, B., & Spero, M. (2024). Technical report on the Pangram AI-generated text classifier. https://arxiv.org/abs/2402.14873
+- George Mason University Writing Center. Hedges: Softening claims in academic writing. https://writingcenter.gmu.edu/guides/hedges-softening-claims-in-academic-writing
+- Gopen, G. D., & Swan, J. A. (1990). The science of scientific writing. *American Scientist, 78*, 550-558. https://www.americanscientist.org/blog/the-long-view/the-science-of-scientific-writing
 - Juzek, T., & Ward, Z. (2025). Why does ChatGPT "delve" so much? https://arxiv.org/abs/2412.11385
 - Karr, J. A., Khvatskii, G., Hua, T., & Chawla, N. V. (2026). Why AI detection fails for academic integrity. https://arxiv.org/abs/2608.11256
 - Kobak, D., et al. (2025). Delving into LLM-assisted writing in biomedical publications through excess vocabulary. https://arxiv.org/abs/2406.07016
 - Liang, W., et al. (2023). GPT detectors are biased against non-native English writers. https://arxiv.org/abs/2304.02819
 - Pangram Labs (2026). 9 signs of AI writing, backed by data. https://www.pangram.com/signs-of-ai-writing
 - Park, H., Jeong, G., & Kim, B. (2026). Style as a confound: False positives in AI detection of non-native academic writing. https://arxiv.org/abs/2608.26710
+- Purdue Online Writing Lab. Strategies for variation. https://owl.purdue.edu/owl/general_writing/academic_writing/sentence_variety/index.html
 - Reinhart, A., et al. (2025). Do LLMs write like humans? Variation in grammatical and rhetorical styles. https://arxiv.org/abs/2410.16107
 - Russell, J., Karpinska, M., & Iyyer, M. (2025). People who frequently use ChatGPT for writing tasks are accurate and robust detectors of AI-generated text. https://arxiv.org/abs/2501.15654
+- The Writing Center, University of North Carolina at Chapel Hill. Paragraphs. https://writingcenter.unc.edu/tips-and-tools/paragraphs/
 - Turnitin. AI writing detection guides. https://guides.turnitin.com
+- University of Manchester. Academic Phrasebank: Being cautious. https://www.phrasebank.manchester.ac.uk/using-cautious-language/
 - Wikipedia. Signs of AI writing. https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing
 - Open-source pattern catalogues: https://github.com/blader/humanizer, https://github.com/egc365/signs-of-ai-writing, https://github.com/berenslab/llm-excess-vocab

@@ -1,6 +1,6 @@
 # Humanized Academic Writing
 
-A skill for Claude (and other models) that revises academic prose so it reads like a competent human scholar wrote it: specific, sourced and plainly worded.
+A skill for Claude (and other models) that drafts and revises academic prose so it reads like a competent human scholar wrote it: well structured, specific, sourced and plainly worded.
 
 It is an editing aid. The patterns it removes are faults in the writing: each stands where a fact, a source or a reason should be. It does not promise any result from an AI detector, and it is not meant to hide AI use. Where your institution asks for an AI logbook or disclosure, the workflow ends by drafting the entry.
 
@@ -8,6 +8,7 @@ The skill is self-contained. It needs no course notes, style guide or sample pap
 
 ## What it does
 
+- Builds paragraphs on five positive structures: claim, evidence and interpretation; given-new flow; hedging with a stated reason; concrete subjects and verbs; sentence length that follows content. Each links to open guidance from a university writing centre.
 - Finds sentences that would be true of any topic and asks for the figure, source, mechanism or comparison that would make them specific.
 - Removes patterns that research links to LLM prose: importance flagging ("this matters"), corrective framing ("not simply X"), trailing "-ing" commentary, attribution to nobody, stacked transitions, emphatic modifiers and stock idioms.
 - Follows the 2026 evidence on which patterns are current. First-generation tells such as "delve" and heavy dash use have faded and are weighted accordingly.
@@ -18,7 +19,8 @@ The skill is self-contained. It needs no course notes, style guide or sample pap
 
 | File | Contents |
 |---|---|
-| `SKILL.md` | Principle, workflow, rewriting recipes, detection checklist, self-checks |
+| `SKILL.md` | Principle, workflow, positive structures, detection checklist, self-checks |
+| `structures.md` | The positive structures in full: rules, examples, a table by section, a build order and public sources |
 | `patterns.md` | Full pattern catalogue with word lists and fixes, starting with the patterns of 2026 models |
 | `examples.md` | Six before and after pairs, one per section type, built from three published articles |
 | `evidence.md` | Research summary with sources and confidence labels, including the November 2026 update |
@@ -34,7 +36,7 @@ git clone https://github.com/Momi1370/Humanized-academic-writing ~/.claude/skill
 
 Then ask Claude to revise a draft in academic mode, or invoke `/humanized-academic-writing`.
 
-**Other models:** paste `SKILL.md` and `patterns.md` into the system prompt.
+**Other models:** paste `SKILL.md`, `structures.md` and `patterns.md` into the system prompt.
 
 ## Self-check script
 
@@ -46,6 +48,6 @@ The script reports sentence-length variation, connective use and pattern counts,
 
 ## Status
 
-Second version, November 2026. It adds the patterns of 2026 models (Graphite's AI Tells studies and the current Wikipedia catalogue) and removes the dependence on private course materials.
+Third version, November 2026. The second version added the patterns of 2026 models (Graphite's AI Tells studies and the current Wikipedia catalogue) and removed the dependence on private course materials. This one adds the positive structures, sourced from public writing-centre guidance.
 
 The rules were checked on six short passages and three published articles. They have not been tested against any commercial detector or on long drafts, and the 2026 patterns were measured by their sources on web articles, not on academic prose. See the last section of `evidence.md` for what was not tested.

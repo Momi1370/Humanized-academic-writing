@@ -2,6 +2,8 @@
 
 Each entry gives the pattern, why it counts, and the repair. Sources are listed in `evidence.md`.
 
+This file covers what to remove. What to build in its place is in `structures.md`, and most repairs below are one of its five structures applied.
+
 No single pattern shows that a text was machine-written. Humans produced all of them before 2022. What marks LLM prose is several at once, at high density, attached to sentences that say nothing specific.
 
 Each pattern is also a fault in the writing, whoever wrote it: it takes the place of a fact, a source or a reason. That is the ground for removing it. Removing it does not make a text pass a detector, and this catalogue is not written for that purpose.

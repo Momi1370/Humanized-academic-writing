@@ -1,6 +1,6 @@
 ---
 name: humanized-academic-writing
-description: Use when drafting, revising or reviewing academic prose (thesis or dissertation chapter, research paper, literature review, abstract, methodology, results, discussion) that reads as generic, inflated or machine-like; when the user asks to humanize or de-AI academic text, asks for academic mode with a humanized approach, or mentions AI detectors such as Turnitin, GPTZero, Pangram or Originality.ai.
+description: Use when drafting, revising or reviewing academic prose (thesis or dissertation chapter, research paper, literature review, abstract, methodology, results, discussion) that reads as generic, inflated or machine-like; when the writer needs help with paragraph structure, flow, cohesion, hedging or sentence rhythm in academic text; when the user asks to humanize or de-AI academic text, asks for academic mode with a humanized approach, or mentions AI detectors such as Turnitin, GPTZero, Pangram or Originality.ai.
 ---
 
 # Humanized Academic Writing
@@ -8,6 +8,8 @@ description: Use when drafting, revising or reviewing academic prose (thesis or 
 ## Core principle
 
 Prose reads as machine-written when it could have been written without knowing the subject. The repair is knowledge on the page: a figure, a named source, a mechanism, a limitation. Swapping words does not supply any of these.
+
+The skill therefore works in two directions. It builds paragraphs on the structures academic readers expect (`structures.md`), and it removes the patterns that stand in for missing content (`patterns.md`). Building comes first, because a paragraph with a claim, its evidence and an interpretation has little left to remove.
 
 Three commitments follow.
 
@@ -53,7 +55,7 @@ One point holds even against a style guide that lists them: connectives such as 
 
 If none exists, delete the sentence. This step does most of the work. Skipping it produces a tidier version of the same generic text.
 
-**Step 4. Rewrite paragraph by paragraph** using the recipes.
+**Step 4. Rewrite paragraph by paragraph** on the positive structures below. When drafting from the writer's notes, follow the build order in `structures.md` (section 6).
 
 **Step 5. Verify.** Check the Step 1 list item by item against the new text. Rerun the script. Run the self-checks.
 
@@ -63,7 +65,19 @@ If none exists, delete the sentence. This step does most of the work. Skipping i
 Date | Tool and model | Prompt (verbatim or summarised) | Purpose | How I processed the output
 ```
 
-## Recipes
+## Positive structures
+
+Build the paragraph on these before checking it for defects. Each checklist pattern is what fills a slot when the content for it is missing. Worked examples, a section-by-section table, the build order and public sources are in `structures.md`.
+
+| Structure | Rule | What it displaces |
+|---|---|---|
+| Claim, evidence, interpretation | A checkable claim, its evidence with the source, then what the evidence means for the research question | Importance flags, formula endings, coverage without argument |
+| Given-new flow | Open on what the reader already has; end on what is new | Stacked transitions |
+| Hedge with a reason | One hedge per claim, with the source of the doubt in the sentence | Hedge stacks, "should be interpreted with caution" |
+| Concrete subject and verb | The thing studied is the subject and its action is the verb | "Serves as", nominalised density, emphatic modifiers |
+| Length from content | Short for a result or a turn; long for a mechanism or a qualification | Uniform rhythm |
+
+The rules in full:
 
 **A paragraph has four parts, in this order:**
 
@@ -133,17 +147,19 @@ The first version could describe any two countries and any policy. Every figure 
 
 1. **Swap test.** Would the sentence survive a change of topic? Then specify it or cut it.
 2. **Three questions.** For each claim: how much, says who, compared with what?
-3. **Last-sentence test.** Delete the final sentence of each paragraph. If nothing is lost, leave it out.
-4. **First-words column.** List the first two words of every sentence. Look for repeats and connective runs.
-5. **Length row.** Write the word count of each sentence in a row. Look for flat stretches.
-6. **Tail test.** For each sentence ending in ", -ing ...": does the clause add a sourced fact? If not, stop at the comma.
-7. **Opponent test.** For each "not X", "rather than X" or "more than X": who holds X? Cite them or state the positive claim.
-8. **Defence test.** Can the writer explain each paragraph's claim and its source without the text in front of them?
+3. **Slot test.** Mark each sentence of a paragraph C (claim), E (evidence) or I (interpretation). A sentence that takes no mark is a candidate for cutting. A paragraph with no E needs material from the writer.
+4. **Last-sentence test.** Delete the final sentence of each paragraph. If nothing is lost, leave it out.
+5. **First-words column.** List the first two words of every sentence. Look for repeats and connective runs, and check that each opener points back to the sentence before.
+6. **Length row.** Write the word count of each sentence in a row. Look for flat stretches.
+7. **Tail test.** For each sentence ending in ", -ing ...": does the clause add a sourced fact? If not, stop at the comma.
+8. **Opponent test.** For each "not X", "rather than X" or "more than X": who holds X? Cite them or state the positive claim.
+9. **Defence test.** Can the writer explain each paragraph's claim and its source without the text in front of them?
 
-`scripts/style_check.py` automates checks 4 to 6, lists the candidates for check 7 and counts the checklist patterns. It reports features and lists sentences to reread. It is not a detector.
+`scripts/style_check.py` automates checks 5 to 7, lists the candidates for check 8 and counts the checklist patterns. It reports features and lists sentences to reread. It is not a detector.
 
 ## Files
 
+- `structures.md`: the positive structures in full, with examples, a build order and public sources
 - `patterns.md`: full pattern catalogue with word lists, evidence and fixes; the 2026 patterns come first
 - `examples.md`: before and after pairs by section type, built from three published articles
 - `evidence.md`: research summary with sources, dated, and the measurements behind the thresholds
