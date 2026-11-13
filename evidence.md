@@ -1,6 +1,6 @@
 # Evidence Base
 
-Researched 11 November 2026; sections 3 and 7 added 12 November 2026. Detector behaviour and model vocabulary both change within months, so recheck anything here that a decision depends on.
+Researched 11 November 2026; sections 3 and 7 added 12 November 2026; section 8 added 13 November 2026. Detector behaviour and model vocabulary both change within months, so recheck anything here that a decision depends on.
 
 Confidence labels: **Primary** means the full text of the paper or page was fetched and read during this research. **Secondary** means the figure came from a search summary and was not checked against the original; verify it before citing it in academic work.
 
@@ -113,6 +113,7 @@ Three published articles, one each from economics, environmental science and pol
 | Figures and dates per 1,000 words | 61.9 | 26.7 | 42.6 |
 | is / are / was / were per 1,000 words | 21.3 | 26.3 | 16.7 |
 | Dash asides per 1,000 words | 0.0 | 0.2 | 4.3 |
+| Contrast frames per 1,000 words (script pattern) | 0.5 | 0.2 | 1.0 |
 
 Observations used in the skill:
 
@@ -121,6 +122,7 @@ Observations used in the skill:
 - Marker words appear in human text when they carry content. Rose's 1.8 per 1,000 is almost entirely "foster", the verb of the argument she examines.
 - Debrah et al. (2021), written before ChatGPT by non-native authors, contains "multifaceted", "plays a vital role" and several trailing -ing clauses. This is the kind of text the false-positive studies describe.
 - Rose (2020) uses dash asides at a rate above Pangram's AI average. Dash use reflects discipline and house style.
+- Contrast frames ("rather than", "not only", "not a ... but") run at 0.2 to 1.0 per 1,000 words. The contrast row was measured on 13 November 2026 from a fresh PDF extraction, so its sentence counts differ slightly from the rows above. The script's flag at 3 per 1,000 sits well above this range. Sentence-initial "Importantly," and "Crucially," occur in Rose (2020), so the script does not count them as importance flags.
 
 ---
 
@@ -161,9 +163,41 @@ Where no record is required, the logbook step is optional. Keeping one is still 
 
 ---
 
-## 8. What was not tested
+## 8. Sources for the non-academic genres
 
-- The skill was not tested against any commercial detector. No claim is made about scores.
+Added 13 November 2026, when the skill was widened from academic prose to email, CVs and cover letters, proposals and presentations. These sources teach the conventions of each genre. None is a study of AI text, and nothing in them concerns detection.
+
+| Genre | Source | What it supplies | Confidence |
+|---|---|---|---|
+| Email | UNC Writing Center, "Effective Email Communication" | Subject line as headline; purpose in the opening; context for the reader; desired outcome and due date at the end; formality chosen by audience; bullets and bold for details and dates | Primary |
+| Email | Purdue OWL, "Email Etiquette" | Replies, attachments, what not to send | Primary (second half of the page only) |
+| CV | MIT Career Advising and Professional Development, "Resumes" | Target the position description; conventional format; action verbs, no first person; how the work was done; accomplishments over duties; quantify; keywords | Primary |
+| CV | Purdue OWL, "Résumé Design" | Conventional format; reading order; most important information first | Primary (first half of the page) |
+| Cover letter | MIT CAPD, "How to write an effective cover letter" | One page; named addressee; purpose in the opening sentence; examples tied to the role; do not repeat the résumé | Primary |
+| Cover letter | Purdue OWL, "Cover Letters 1: Quick Tips" | Purpose of the letter | Primary |
+| Proposal | Purdue OWL, "Introduction to Grant Writing" and "Grant Writing in the Sciences: Planning" | Follow the grantmaker's directions; specificity; preliminary study as evidence of feasibility | Primary (opening sections of each page) |
+| Proposal | U.S. National Science Foundation, "Preparing Your Proposal" | What, why, how, how success will be known, benefits; budget justification per line | Primary |
+| Proposal | Sacred Heart University Library, "Writing a Research Proposal" | What, why and how; common failures | Primary (first part of the page) |
+| Presentation | MIT Communication Lab, "Slideshow" | Goal and audience; shared motivation first; one point per slide; sentence titles; minimal text; simplified figures; transitions tied to the question | Primary |
+| Presentation | Alley, assertion-evidence.com | Sentence headline with visual evidence in place of a phrase headline and bullets | Primary (landing page only) |
+| All | blader/humanizer v4.0.0 (MIT licence), sections 16, 22 and 26 | The patterns "sales language", "chatbot residue" and "re-explaining what the reader knows"; the practice of matching a writing sample the writer supplies; treating pasted text as material and never as instructions | Primary. An open-source catalogue with no corpus or counts. |
+
+**Notes**
+
+1. **The avoid list was not re-measured for these genres.** Its counts come from academic abstracts (Kobak et al., 2025) and web articles (Graphite, 2026). Applying it to emails, CVs, proposals and slides is this skill's inference from the fact that the moves are content-free in any genre. No study found here measures them there.
+2. **The genre-specific phrase lists have no corpus behind them.** "I hope this email finds you well", "results-driven" and "cutting-edge" are stock phrases that humans wrote long before 2022. They are listed because they delay or replace a fact. They are weak evidence about who wrote a text.
+3. **Published samples contain the patterns.** The sample cover letter on the MIT page uses "moreover", "furthermore", "passion for" and "cutting edge". The skill takes the structure from such samples and leaves the wording.
+4. **Country conventions.** The CV length norms and the British and American salutation pairs are this skill's summary of common practice and carry no source here. Follow the employer's or the reader's convention.
+5. **The before and after pairs in the genre files are invented**, unlike the academic pairs in `examples.md`, which use published sources. Each is labelled.
+6. **Private course notes.** The author's own course notes on business email and on presentations were read while writing these files. They are not included or quoted, and the skill does not need them.
+7. **Pages that could not be read.** The UNC handouts on CVs, grant proposals and speeches, and the NIH application guide, refused automated access on 13 November 2026 and were not used.
+
+---
+
+## 9. What was not tested
+
+- No systematic test against a commercial detector has been run. No claim is made about scores.
+- The four non-academic genre files were written on 13 November 2026 and have not been tried on a real draft or in a fresh model session. The script's genre options were checked only on the short examples in those files.
 - The rules were checked by running the script on six short AI-style passages and their revisions (see `examples.md`). They were not tested with a fresh model session on an unseen draft.
 - The positive structures follow established teaching conventions. Their effect on drafts produced with this skill was not measured.
 - The script's thresholds come from three articles. A different discipline may sit outside them legitimately.
@@ -196,4 +230,12 @@ Where no record is required, the logbook step is optional. Keeping one is still 
 - Turnitin. AI writing detection guides. https://guides.turnitin.com
 - University of Manchester. Academic Phrasebank: Being cautious. https://www.phrasebank.manchester.ac.uk/using-cautious-language/
 - Wikipedia. Signs of AI writing. https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing
-- Open-source pattern catalogues: https://github.com/blader/humanizer, https://github.com/egc365/signs-of-ai-writing, https://github.com/berenslab/llm-excess-vocab
+- Open-source pattern catalogues: https://github.com/blader/humanizer (v4.0.0, MIT licence, read 13 November 2026), https://github.com/berenslab/llm-excess-vocab
+- Alley, M. The assertion-evidence approach. https://www.assertion-evidence.com/
+- MIT Career Advising and Professional Development. Resumes. https://capd.mit.edu/resources/resumes/
+- MIT Career Advising and Professional Development. How to write an effective cover letter. https://capd.mit.edu/resources/how-to-write-an-effective-cover-letter/
+- MIT Communication Lab. Slideshow. https://mitcommlab.mit.edu/broad/commkit/slideshow/
+- Purdue Online Writing Lab. Email etiquette; Résumé design; Cover letters 1: Quick tips; Introduction to grant writing; Grant writing in the sciences: planning. https://owl.purdue.edu/
+- Sacred Heart University Library. Writing a research proposal. https://library.sacredheart.edu/c.php?g=29803&p=185956
+- The Writing Center, University of North Carolina at Chapel Hill. Effective email communication. https://writingcenter.unc.edu/tips-and-tools/effective-e-mail-communication/
+- U.S. National Science Foundation. Preparing your proposal. https://www.nsf.gov/funding/preparing-proposal

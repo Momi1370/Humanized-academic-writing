@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
-"""Self-check for academic prose: rhythm, connectives, and patterns over-represented in LLM output.
+"""Self-check for writing: patterns over-represented in LLM output, plus rhythm and connectives for prose.
 
 This is NOT an AI detector. It counts surface features and lists sentences worth rereading.
 A clean report does not mean a text will pass a detector; a flagged sentence may be perfectly good.
 
 Usage:
     python3 style_check.py draft.txt
-    pbpaste | python3 style_check.py
+    python3 style_check.py draft.txt --genre email
+    pbpaste | python3 style_check.py --genre cv
+
+Genres: academic (default), proposal, email, cv, presentation.
+Rhythm and connective thresholds come from journal articles, so they run for academic and proposal only.
 """
+import argparse
 import re
 import statistics as st
 import sys
@@ -31,10 +36,40 @@ STOCK = [
     r"cannot be overstated", r"in conclusion,", r"when it comes to",
     r"(?:stands?|serves?) as a (?:testament|reminder)",
 ]
+# Stock phrases by genre. Humans wrote all of these before 2022; they are listed because they delay or replace a fact.
+GENRE_STOCK = {
+    "email": [
+        r"hope this (?:email|message|note|letter) finds you", r"I (?:just )?wanted to reach out", r"touch base",
+        r"circle back", r"at your earliest convenience", r"do(?: not|n't) hesitate to",
+        r"thank you (?:so much |very much )?for your time and consideration", r"I am writing to express",
+        r"I (?:truly|really|deeply|sincerely) appreciate", r"I cannot stress enough", r"esteemed",
+    ],
+    "cv": [
+        r"responsible for", r"tasked with", r"duties included", r"results[- ]driven", r"track record",
+        r"highly motivated", r"detail[- ]oriented", r"team player", r"fast[- ]paced", r"passion(?:ate)? (?:about|for)",
+        r"strong (?:communication|interpersonal|analytical|leadership) skills", r"ideal candidate", r"perfect fit",
+        r"keen interest", r"esteemed", r"spearhead\w*", r"utili[sz]\w+", r"synerg\w+", r"stakeholders",
+        r"actionable insights", r"driv(?:e|es|ing) (?:business )?(?:impact|results|growth)", r"instrumental in",
+        r"play(?:s|ed)? a key role",
+    ],
+    "proposal": [
+        r"innovative", r"\bnovel\b", r"state[- ]of[- ]the[- ]art", r"world[- ]class", r"critical gap",
+        r"timely and relevant", r"significant impact", r"stakeholders", r"paradigm", r"unique opportunity",
+        r"lasting contribution", r"has the potential to", r"rapidly evolving",
+    ],
+    "presentation": [
+        r"^(?:overview|agenda|introduction|background|results|conclusions?|key takeaways|summary|next steps|"
+        r"challenges and opportunities|thank you!?|questions\??|any questions\??)$",
+        r"excited to", r"take you on a journey", r"without further ado", r"fast[- ]paced world", r"let'?s dive in",
+        r"the power of", r"why (?:this|it) matters", r"significant (?:improvement|growth|impact|increase)",
+        r"\benhanced\b", r"promising (?:implications|results)",
+    ],
+}
 # Importance flagging in 2026 models (Graphite, AI Tells, 2026; Wikipedia: Signs of AI writing).
 IMPORTANCE = (
     r"\b(?:this|that|it|distinction|difference) matters\b|\bwhy [\w' -]{1,40}? matters?\b|"
-    r"\bmatters? (?:because|most|more than|enormously)\b|\bjust as important\b|\babsolutely essential\b|"
+    r"\bmatters? (?:(?:here|now|most|more) )?because\b|\bmatters? (?:most|more than|enormously|as much as)\b|"
+    r"\bjust as important\b|\babsolutely essential\b|"
     r"(?<!these )(?<!those )(?<!such )(?<!other )\bmatters[.;:]"
 )
 # Emphatic modifiers and stock idioms elevated in Gemini (Graphite, AI Tells: Gemini 4 Argon, 2026).
@@ -43,16 +78,25 @@ EMPHATIC = (
     r"\bbridg(?:e|es|ed|ing) th(?:e|is|at) gap\b|\bfast[- ]paced world\b|\bhalf the battle\b|\bheavy lifting\b|"
     r"\bcrystal clear\b|\bgold standard\b"
 )
+# The assistant's wrapper or a template placeholder left in the text.
+RESIDUE = (
+    r"\bI hope this helps\b|\b(?:certainly|of course|absolutely)!|\bgreat question\b|"
+    r"\bhere(?: is|'s) (?:a|an|the|your) (?:draft|revised|tailored|polished|updated|rewritten)\b|"
+    r"\blet me know if you(?:'d| would) like\b|\bfeel free to (?:adjust|adapt|modify|tweak|customi[sz]e)\b|"
+    r"\[(?:your|insert|company|name|recipient|date|position|role)[^\]]{0,40}\]"
+)
+INVISIBLE = "[​‌‍⁠﻿]"
 COPULA = r"\b(?:serves?|stands?|acts?|functions?|operates?) as (?:a|an|the)\b|\bboasts?\b|\brepresents? a (?:significant|major|key|crucial|pivotal)\b"
 QUANTITY = r"third|quarter|half|fifth|tenth|decade|century|year|month|week|day|dozen|hundred|thousand|million|billion|few"
 CONTRAST = (
     r"\bnot (?:only|just|merely|simply)\b|\bmore than just\b|\brather than\b|\bit is not\b[^.]{1,60}\bbut\b|"
+    r"\bnot (?:as )?an? [^.,;]{1,60}\bbut\b|"
     rf"\b(?:is|are|was|were) more than (?:simply |merely )?an? (?!(?:{QUANTITY})\b)|\bless like\b[^.]{{1,60}}\bmore like\b"
 )
 TAIL_VERBS = (
     "highlighting|underscoring|emphasi[sz]ing|showcasing|reflecting|demonstrating|illustrating|indicating|suggesting|"
     "ensuring|enabling|allowing|fostering|contributing|leading|making|providing|offering|paving|shaping|reinforcing|"
-    "revealing|resulting|enhancing|facilitating|driving|creating|signaling|signalling|marking"
+    "revealing|resulting|enhancing|facilitating|driving|creating|signaling|signalling|marking|delivering"
 )
 TAIL = rf",\s+(?:thereby |thus |further |ultimately |effectively )?(?:{TAIL_VERBS})\b"
 VAGUE = (
@@ -70,23 +114,40 @@ CONNECTIVES = [
 ADDITIVE = ["moreover", "furthermore", "additionally", "in addition"]
 FORMAL = ADDITIVE + ["conversely"]
 CLOSERS = r"^(?:Overall|Ultimately|In summary|In conclusion|In essence|In short|This (?:highlights|underscores|demonstrates|shows)|These findings (?:highlight|underscore|demonstrate))\b"
-ABBR = r"\b(?:et al|e\.g|i\.e|cf|vs|Fig|Figs|Eq|No|Vol|pp|ca|approx|Dr|Prof|Mr|Ms|St)\."
+ABBR = r"\b(?:et al|e\.g|i\.e|cf|vs|Fig|Figs|Eq|No|Vol|pp|ca|approx|Dr|Prof|Mr|Mrs|Ms|St)\."
 
+PROSE = ("academic", "proposal")          # rhythm and connective thresholds apply
+LINE_UNITS = ("cv", "presentation")       # the unit is the bullet or slide line, not the sentence
 # Indicative ranges from three published, pre-2022 human articles (economics, environmental science, political theory).
-HUMAN = {"cv": "0.46-0.59", "conn": "5-10%", "markers": "0-1.8", "tails": "0.2-0.4", "numbers": "27-62"}
+HUMAN = {"cv": "0.46-0.59", "conn": "5-10%", "markers": "0-1.8", "tails": "0.2-0.4", "numbers": "27-62",
+         "contrast": "0.2-1.0"}
 
 
-def split_sentences(paragraph):
+def split_sentences(paragraph, min_words=3):
     p = re.sub(ABBR, lambda m: m.group(0).replace(".", "<D>"), paragraph)
     parts = re.split(r"(?<=[.!?])\s+(?=[A-Z\"'(\[])", p)
-    return [s.replace("<D>", ".").strip() for s in parts if len(s.split()) >= 3]
+    return [s.replace("<D>", ".").strip() for s in parts if len(s.split()) >= min_words]
 
 
-def load(text):
+def clean_line(line):
+    """Strip quote, bullet, heading and bold markup so a bullet or slide line can be read as text."""
+    line = re.sub(r"^\s*(?:>\s*)*", "", line)
+    line = re.sub(r"^(?:[-*•–]|\d+[.)]|#+)\s+", "", line)
+    return line.replace("**", "").strip()
+
+
+def load(text, genre):
+    """Return a list of units, each a list of sentences (prose and email) or a single line (cv, presentation)."""
     text = text.replace("’", "'").replace("“", '"').replace("”", '"')
+    if genre in LINE_UNITS:
+        return [[clean_line(l)] for l in text.split("\n") if clean_line(l)]
     blocks = re.split(r"\n\s*\n", text) if re.search(r"\n\s*\n", text) else text.split("\n")
     paras = [re.sub(r"\s+", " ", b).strip() for b in blocks]
-    return [p for p in paras if len(p.split()) >= 15 and not p.startswith("#")]
+    if genre in PROSE:
+        paras = [p for p in paras if len(p.split()) >= 15 and not p.startswith("#")]
+        return [split_sentences(p) for p in paras]
+    paras = [" ".join(clean_line(l) for l in b.split("\n")) for b in re.split(r"\n\s*\n", text)]
+    return [s for s in (split_sentences(p, min_words=2) for p in paras if p.strip()) if s]
 
 
 def longest_flat_run(lengths, tolerance=6):
@@ -109,20 +170,7 @@ def show(title, items, limit=8):
         print(f"  ... and {len(items) - limit} more")
 
 
-def main():
-    raw = open(sys.argv[1], errors="ignore").read() if len(sys.argv) > 1 else sys.stdin.read()
-    paras = load(raw)
-    para_sents = [split_sentences(p) for p in paras]
-    sents = [s for ps in para_sents for s in ps]
-    if len(sents) < 3:
-        sys.exit("Need at least three sentences of prose.")
-    lengths = [len(s.split()) for s in sents]
-    words = sum(lengths)
-    text = " ".join(sents)
-    per_k = lambda n: n / words * 1000
-    flags = []
-
-    print(f"Words: {words}   Sentences: {len(sents)}   Paragraphs: {len(paras)}")
+def report_rhythm(sents, lengths, flags):
     print("\nRHYTHM")
     mean, sd = st.mean(lengths), st.pstdev(lengths)
     cv = sd / mean
@@ -137,6 +185,8 @@ def main():
     if len(sents) >= 10 and (min(lengths) > 12 or max(lengths) < 30):
         flags.append("No short sentence (12 words or fewer) or no long one (30 or more).")
 
+
+def report_connectives(sents, text, per_k, flags):
     print("\nCONNECTIVES AND OPENERS")
     starts = [c for s in sents for c in CONNECTIVES if re.match(rf"{c}\b[ ,]", s.lower())]
     additive = [c for c in starts if c in ADDITIVE]
@@ -154,26 +204,67 @@ def main():
     if repeats:
         print(f"  same opening word three times running: {', '.join(repeats)}")
 
+
+def main():
+    ap = argparse.ArgumentParser(description="Self-check for writing. Not an AI detector.")
+    ap.add_argument("file", nargs="?", help="text file; reads standard input when omitted")
+    ap.add_argument("--genre", default="academic", choices=["academic", "proposal", "email", "cv", "presentation"])
+    args = ap.parse_args()
+    genre = args.genre
+    raw = open(args.file, errors="ignore").read() if args.file else sys.stdin.read()
+
+    invisible = len(re.findall(INVISIBLE, raw))
+    raw = re.sub(INVISIBLE, "", raw)
+    units = load(raw, genre)
+    sents = [s for u in units for s in u]
+    if not sents:
+        sys.exit("Not enough text to check.")
+    lengths = [len(s.split()) for s in sents]
+    words = sum(lengths)
+    text = " ".join(sents)
+    per_k = lambda n: n / words * 1000
+    flags = []
+    unit_name = "Lines" if genre in LINE_UNITS else "Sentences"
+    print(f"Genre: {genre}   Words: {words}   {unit_name}: {len(sents)}"
+          + ("" if genre in LINE_UNITS else f"   Paragraphs: {len(units)}"))
+
+    if genre in PROSE:
+        report_rhythm(sents, lengths, flags)
+        report_connectives(sents, text, per_k, flags)
+    else:
+        print("\nRhythm and connective measures are skipped for this genre; their thresholds come from journal articles.")
+
     print("\nPATTERNS (per 1,000 words)")
     markers = re.findall(rf"\b(?:{MARKERS})\b", text, flags=re.I)
     tails = [s for s in sents if re.search(TAIL, s)]
     copulas = [s for s in sents if re.search(COPULA, s, flags=re.I)]
     contrasts = [s for s in sents if re.search(CONTRAST, s, flags=re.I)]
     stock = [s for s in sents if any(re.search(p, s, flags=re.I) for p in STOCK)]
+    genre_stock = [s for s in sents if any(re.search(p, s, flags=re.I) for p in GENRE_STOCK.get(genre, []))]
     importance = [s for s in sents if re.search(IMPORTANCE, s, flags=re.I)]
     emphatic = [s for s in sents if re.search(EMPHATIC, s, flags=re.I)]
+    residue = [s for s in sents if re.search(RESIDUE, s, flags=re.I)]
     vague = [s for s in sents if re.search(VAGUE, s, flags=re.I) and not re.search(CITED, s)]
-    closers = [ps[-1] for ps in para_sents if len(ps) >= 3 and re.match(CLOSERS, ps[-1])]
+    closers = [u[-1] for u in units if len(u) >= 3 and re.match(CLOSERS, u[-1])]
     numbers = len(re.findall(r"\b\d[\d.,]*%?", text))
     dashes = len(re.findall("—| – | -- ", text))
-    print(f"  marker vocabulary: {per_k(len(markers)):.1f}   [human articles: {HUMAN['markers']}]"
+    human = lambda key: f"   [human articles: {HUMAN[key]}]" if genre in PROSE else ""
+    print(f"  marker vocabulary: {per_k(len(markers)):.1f}{human('markers')}"
           + (f"   -> {', '.join(sorted(set(m.lower() for m in markers)))}" if markers else ""))
-    print(f"  trailing -ing commentary clauses: {per_k(len(tails)):.1f}   [human articles: {HUMAN['tails']}]")
-    print(f"  contrast frames (not only / not simply / rather than / more than a): {per_k(len(contrasts)):.1f}")
+    print(f"  trailing -ing commentary clauses: {per_k(len(tails)):.1f}{human('tails')}")
+    print(f"  contrast frames (not only / not simply / rather than / more than a): {per_k(len(contrasts)):.1f}{human('contrast')}")
     print(f"  importance flags (this matters / matters because): {per_k(len(importance)):.1f}")
     print(f"  emphatic modifiers and stock idioms: {per_k(len(emphatic)):.1f}")
-    print(f"  figures and dates: {per_k(numbers):.1f}   [human articles: {HUMAN['numbers']}]")
+    print(f"  figures and dates: {per_k(numbers):.1f}{human('numbers')}")
     print(f"  dash asides: {per_k(dashes):.1f}")
+    if genre == "cv":
+        with_figure = sum(1 for s in sents if re.search(r"\d", s))
+        print(f"  lines containing a figure: {with_figure} of {len(sents)}")
+    if invisible:
+        print(f"  invisible characters (zero-width): {invisible}")
+        flags.append(f"{invisible} invisible zero-width characters found. Delete them.")
+    if residue:
+        flags.append("Chat residue or a template placeholder is still in the text.")
     if len(markers) >= 3 and per_k(len(markers)) > 3:
         flags.append("Marker vocabulary is dense. Replace each with the plain verb or the specific claim.")
     if len(tails) >= 2 and per_k(len(tails)) > 2:
@@ -184,9 +275,13 @@ def main():
         flags.append("Importance is asserted more than once ('this matters'). Give the reason as a fact instead.")
     if len(emphatic) >= 2 and per_k(len(emphatic)) > 2:
         flags.append("Emphatic modifiers or idioms recur. Replace each with the magnitude or the literal statement.")
-    if words >= 150 and per_k(numbers) < 5:
+    if genre in PROSE and words >= 150 and per_k(numbers) < 5:
         flags.append("Almost no figures, dates or citations. Check whether claims can be anchored to evidence.")
+    if len(genre_stock) >= 2:
+        flags.append(f"Stock {genre} phrases recur. Replace each with the fact, the request or the evidence.")
 
+    show("REREAD: chat residue or placeholder", residue)
+    show(f"REREAD: stock {genre} phrases; give the fact, the request or the evidence", genre_stock)
     show("REREAD: trailing -ing commentary", tails)
     show("REREAD: stock phrases", stock)
     show("REREAD: importance asserted ('this matters', 'matters because')", importance)
@@ -199,7 +294,7 @@ def main():
     print("\nSUMMARY")
     for f in flags or ["No threshold crossed. Read the REREAD lists above and the text aloud."]:
         print("  * " + f)
-    print("\nThis report counts surface features only. It cannot judge whether the argument is specific, "
+    print("\nThis report counts surface features only. It cannot judge whether the text is specific, "
           "sourced and yours.")
 
 

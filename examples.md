@@ -1,6 +1,6 @@
 # Before and After
 
-Six pairs, one per section type. The "before" passages are written in default LLM style. Every fact and citation in the "after" passages comes from three published articles, chosen to cover three disciplines. The skill does not need them; they are here so that every example can be checked against a real source.
+Six pairs for academic writing, one per section type. The other genres have one pair each in their files under `genres/`. The "before" passages are written in default LLM style. Every fact and citation in the "after" passages comes from three published articles, chosen to cover three disciplines. The skill does not need them; they are here so that every example can be checked against a real source.
 
 - Piketty, T., & Qian, N. (2009). Income inequality and progressive income taxation in China and India, 1986-2015. *American Economic Journal: Applied Economics, 1*(2), 53-63.
 - Debrah, J. K., Vidal, D. G., & Dinis, M. A. P. (2021). Raising awareness on solid waste management through formal education for sustainability. *Recycling, 6*(1), 6.
@@ -72,7 +72,7 @@ Measured with `scripts/style_check.py`, the six "before" passages together trip 
 
 - Three -ing tails carried the interpretation ("transformative impact", "power of fiscal reform"). By convention, interpretation stays out of the results section, so they are removed here and the reasoning moves to the discussion.
 - "Striking", "remarkable" and "relatively stagnant" became the numbers they stood for.
-- Simple past for the data, as the tense convention in `SKILL.md` requires.
+- Simple past for the data, as the tense convention in `genres/academic.md` requires.
 
 ---
 

@@ -2,7 +2,9 @@
 
 Each entry gives the pattern, why it counts, and the repair. Sources are listed in `evidence.md`.
 
-This file covers what to remove. What to build in its place is in `structures.md`, and most repairs below are one of its five structures applied.
+This list is the same for every kind of writing. A thesis, an email, a CV, a proposal and a slide deck go generic through the same moves; what differs is the form the move takes, and each file in `genres/` shows the usual forms for its genre. Most of the measurements below come from academic prose and web articles, so the examples are academic.
+
+This file covers what to remove. What to build in its place is in the genre file, and for academic prose in `structures.md`.
 
 No single pattern shows that a text was machine-written. Humans produced all of them before 2022. What marks LLM prose is several at once, at high density, attached to sentences that say nothing specific.
 
@@ -161,6 +163,33 @@ Every side gets one balanced sentence; none is weighed. The literature review re
 
 **Repair:** synthesise. Group the sources by the position they take, then say what the grouping shows about the research question.
 
+### A7. Praise without evidence
+
+The text describes its subject, or its writer, in the words of an advertisement.
+
+- CV and cover letter: "results-driven", "proven track record", "highly motivated", "passionate about", "ideal candidate"
+- Proposal: "innovative", "novel", "cutting-edge", "state-of-the-art", "world-class"
+- Email: "your invaluable guidance", "your esteemed institution"
+- Slides: "game-changing", "unlocking the power of"
+
+Listed as "sales language" in an open-source catalogue (blader/humanizer, section 16). No study cited here has counted it, so it carries the tier "Catalogue". These phrases were common in human job applications and funding bids long before language models, which is the reason a reader skips them.
+
+**Repair:** the evidence the adjective stands for (a number, a comparison with the closest alternative, something delivered), or delete.
+
+> Results-driven analyst with a proven track record. → Cut monthly reporting time from 3 days to 4 hours.
+
+### A8. Writing for the wrong reader
+
+A model writes for a reader who shares no context. A reply, an email to a supervisor or a slide for colleagues has a reader who already knows the background. The text rebuilds that background and reaches the request, answer or decision in its last line.
+
+- A reply that restates the problem the other person raised
+- An email that reports the history of a project to the person who supervises it
+- A slide deck that spends half its time on material the audience teaches
+
+Adapted from blader/humanizer, section 26. Tier "Catalogue". Each sentence can read well on its own, so this survives sentence-level editing.
+
+**Repair:** lead with the request or the decision. Keep the one fact the reader lacks and any detail they need in order to act. Act on this pattern only when the reader's knowledge is known: ask the writer, or read the thread.
+
 ---
 
 ## B. Sentence patterns
@@ -208,7 +237,7 @@ Human reference, three published articles:
 
 Sentence length differs by discipline. Variation is what the three share.
 
-**Repair:** the length recipe in `SKILL.md`. Length follows content; do not vary it at random.
+**Repair:** the length rule in `genres/academic.md`. Length follows content; do not vary it at random.
 
 ### B6. Stacked openers
 
@@ -279,11 +308,14 @@ Keep any of these words when it is the field's term or the source's term. "Foste
 
 ---
 
-## E. Formatting carried over from chat
+## E. Formatting and residue carried over from chat
+
+- **Chat residue.** The assistant's wrapper left in the text: "Certainly! Here is ...", "I hope this helps", "Let me know if you would like ...", "[Your Name]", "[Insert figure]". It is the most certain sign on this list and the easiest to miss when it surrounds real content. Remove the wrapper, keep the content, and search for every square bracket before sending.
+- **Invisible characters.** Zero-width spaces and joiners (U+200B, U+200C, U+200D, U+2060, U+FEFF) sometimes arrive with pasted text. They do nothing for a reader and can break search, word counts and reference managers. `scripts/style_check.py` counts them; delete any it finds.
 
 - Dash asides in pairs. This was a strong marker of models up to 2025 and is now mostly historical: the newest GPT, Claude and Gemini models use dashes less often than pre-2022 human writers (Graphite, 2026), while Rose (2020) uses them heavily. In a thesis, follow the field's house style; where there is none, prefer commas or parentheses.
 - Bold on key terms in running prose
-- Bullet lists where the genre expects paragraphs
+- Bullet lists where the genre expects paragraphs (in a CV or on a slide the list is the genre; see the form table in `SKILL.md`)
 - Title Case in Headings
 - Leftover markdown symbols, curly and straight quotes mixed
 
@@ -291,9 +323,9 @@ Keep any of these words when it is the field's term or the source's term. "Foste
 
 ## F. Not defects
 
-Leave these alone. Wikipedia's editors list most of them as ineffective indicators, and detector research shows that formal and non-native writing is flagged for exactly these features.
+Leave these alone. Wikipedia's editors list most of them as ineffective indicators, and detector research shows that formal and non-native writing is flagged for exactly these features. Each genre file adds the conventions that are normal for it, such as a salutation in an email or fragments in a CV.
 
-- Formal or academic register
+- Formal or academic register, where the reader expects it
 - Correct grammar and spelling
 - Passive voice in methods
 - Hedging as such
@@ -317,3 +349,5 @@ Commercial humanizers lower detection scores by damaging the text: narrower voca
 - Vary sentence length at random, unrelated to content
 - Swap a marker word for its nearest synonym ("delve into" to "dive into") and keep the empty sentence
 - Rewrite "this matters" as "this is important". The flag is the fault, whatever its wording
+- Swap one praise word for another ("passionate" to "enthusiastic") and keep the claim without evidence
+- Add personality, humour or anecdote to a genre that does not carry it

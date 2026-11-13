@@ -1,6 +1,6 @@
 # Positive Structures
 
-What competent academic prose does, stated as things to build. `patterns.md` lists what to remove, and most of its repairs are one of the structures below, applied.
+What competent academic prose does, stated as things to build. This file belongs to `genres/academic.md`; the other genres carry their structures in their own files. `patterns.md` lists what to remove, and most of its repairs are one of the structures below, applied.
 
 The guidance is self-contained. Each section ends with a public source that teaches the convention at more length. The examples draw on the three published articles cited in `examples.md`, so every figure can be checked.
 
@@ -177,7 +177,7 @@ Disciplines differ in average length. The three articles measured in `evidence.m
 5. Hedge the interpretations and give each hedge its reason. Leave the data unhedged.
 6. Turn inflated frames and stacked nominalisations into subject-verb statements.
 7. Read the sentence lengths and repair any flat stretch as in section 5.
-8. Run the detection checklist in `SKILL.md`.
+8. Run the avoid list in `SKILL.md`.
 
 ---
 
